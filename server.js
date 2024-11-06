@@ -40,28 +40,20 @@ wss.on('connection', (ws) => {
 
   // Lắng nghe sự thay đổi dữ liệu từ Arduino
   parser.on('data', (data) => {
-    console.log(data);  // In ra slot
-    
     // Kiểm tra xem dữ liệu có đúng định dạng không, ví dụ: "Slot 1: Available"
-    if (data && data.includes(':')) {
-      const parts = data.split(':');
+    const parts = data.split(':');
       
       // Kiểm tra nếu phần đầu tiên chứa "Slot"
-      if (parts[0].includes('Slot')) {
-        const slot = parseInt(parts[0].split(' ')[1].trim());  // Lấy số slot
-        const status = parts[1].trim().toLowerCase() === 'available' ? 0 : 1;  // Trạng thái
-  
-        // Tiến hành xử lý tiếp, ví dụ như cập nhật cơ sở dữ liệu, gửi WebSocket, v.v.
-        console.log(`Đã phân tích Slot: ${slot}, Trạng thái: ${status}`);
-        
-        // Cập nhật trạng thái và lịch sử bãi đỗ
-        updateSlotStatus(slot, status);
-      } else {
-        console.warn('Dữ l    iệu nhận được không có thông tin về Slot:', data);
-      }
-    } else {
-      console.warn('Dữ liệu nhận được không đúng định dạng:', data);
-    }
+      
+    const slot = parseInt(parts[0].split(' ')[1].trim());  // Lấy số slot
+    const status = parts[1].trim().toLowerCase() === 'available' ? 0 : 1;  // Trạng thái
+
+    // Tiến hành xử lý tiếp, ví dụ như cập nhật cơ sở dữ liệu, gửi WebSocket, v.v.
+    
+    // Cập nhật trạng thái và lịch sử bãi đỗ
+    updateSlotStatus(slot, status);
+      
+    
   });
   
   // Hàm cập nhật trạng thái slot
@@ -83,7 +75,7 @@ wss.on('connection', (ws) => {
               if (err) {
                 console.error('Error inserting data into parking_history:', err);
               } else {
-                console.log(`Vehicle entered: Slot ${slot}, Status ${status}`);
+                console.log(`Xe đỗ vào slot ${slot}`);
               }
             });
           } else {
@@ -93,7 +85,7 @@ wss.on('connection', (ws) => {
               if (err) {
                 console.error('Error updating parking_history:', err);
               } else {
-                console.log(`Vehicle left: Slot ${slot}, Status ${status}`);
+                console.log(`Xe rời đi ở slot ${slot}`);
               }
             });
           }
@@ -143,7 +135,16 @@ app.get('/api/history', (req, res) => {
     SELECT id, slotId, 
            DATE_FORMAT(timeIn, '%Y/%m/%d %H:%i') AS timeIn,
            DATE_FORMAT(timeOut, '%Y/%m/%d %H:%i') AS timeOut,
-           TIMESTAMPDIFF(MINUTE, timeIn, timeOut) AS totalTime
+           CASE
+             WHEN TIMESTAMPDIFF(SECOND, timeIn, timeOut) < 60 THEN 
+               CONCAT(TIMESTAMPDIFF(SECOND, timeIn, timeOut), ' seconds')
+             WHEN TIMESTAMPDIFF(MINUTE, timeIn, timeOut) < 60 THEN 
+               CONCAT(TIMESTAMPDIFF(MINUTE, timeIn, timeOut), ' mins')
+             WHEN TIMESTAMPDIFF(HOUR, timeIn, timeOut) < 24 THEN 
+               CONCAT(TIMESTAMPDIFF(HOUR, timeIn, timeOut), ' hrs ', TIMESTAMPDIFF(MINUTE, timeIn, timeOut) % 60, ' mins')
+             ELSE 
+               CONCAT(TIMESTAMPDIFF(DAY, timeIn, timeOut), ' days ', TIMESTAMPDIFF(HOUR, timeIn, timeOut) % 24, ' hrs')
+           END AS totalTime
     FROM parking_history
     WHERE timeOut IS NOT NULL;
   `;

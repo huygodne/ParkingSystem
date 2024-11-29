@@ -40,30 +40,25 @@
 
 .slot.available {
   background-color: #d4edda;
-  /* Green background for available */
+  /* Nền xanh cho available */
   box-shadow: 0 4px 10px rgba(0, 128, 0, 0.3);
-  /* Add shadow for depth */
 }
 
 .slot.occupied {
   background-color: #f8d7da;
-  /* Red background for occupied */
+  /* Nền đỏ occupied */
   box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
-  /* Add shadow for depth */
 }
 
 .slot:hover {
   transform: scale(1.05);
-  /* Scale up on hover for effect */
 }
 
 .slot-label {
   font-weight: bold;
   margin-top: 8px;
   font-size: 20px;
-  /* Larger font size */
   color: #333;
-  /* Darker text color */
 }
 
 /* Phần Info Boxes (Không thay đổi kích thước khi phóng to/thu nhỏ) */
@@ -91,9 +86,7 @@
 
 .info-box:hover {
   transform: scale(1.05);
-  /* Slightly scale up the info box on hover */
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
-  /* Stronger shadow on hover */
 }
 
 .info-box h5 {
@@ -101,24 +94,19 @@
   font-size: 22px;
   font-weight: bold;
   color: #333;
-  /* Darker text color for better contrast */
 }
 
 .info-box p {
   font-size: 18px;
   color: #555;
-  /* Lighter text color */
   margin-top: 10px;
 }
 
-
-/* Main container styling for alignment */
 .main-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 50px;
-  /* Create space between the header and info-boxes */
 }
 
 /* Đảm bảo Sidebar giữ nguyên chiều rộng */
@@ -132,48 +120,34 @@
 
 .sidebar .nav-link {
   font-size: 18px;
-  /* Font size for nav items */
   color: #495057;
-  /* Dark text color */
   padding: 10px 20px;
-  /* Padding for better spacing */
   border-radius: 8px;
-  /* Rounded corners for nav items */
   text-decoration: none;
-  /* Remove underline */
   display: block;
-  /* Ensure each link takes full width */
   transition: background-color 0.3s ease;
-  /* Smooth background transition */
 }
 
 .sidebar .nav-link:hover,
 .sidebar .nav-link.active {
   background-color: #007bff;
-  /* Change background on hover or active state */
   color: #fff;
-  /* White text when hovered */
 }
 
 .sidebar h4 {
   text-align: center;
   color: #007bff;
-  /* Blue text for the header */
   font-size: 24px;
-  /* Larger header text */
   font-weight: bold;
-  /* Bold header */
 }
 
 .sidebar .nav-item {
   margin-bottom: 15px;
-  /* Space between nav items */
 }
 
-/* Style for Sidebar in Mobile View */
+/* Mobile View */
 @media (max-width: 768px) {
   .sidebar {
     width: 200px;
-    /* Smaller width for mobile */
   }
 }
